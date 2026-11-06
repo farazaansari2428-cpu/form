@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهیار لجستیک | ثبت وضعیت تحویل</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2B2F36;--g1:#F3F4F6;--g2:#E3E5E9;--g3:#C9CED6;--g4:#8A919C;--white:#fff;--red:#C0392B}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--g1);color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif}
+header{background:linear-gradient(160deg,#E9EBEF,#D4D8DE);padding:22px 20px 64px}
+.bar{display:flex;align-items:center;justify-content:space-between;max-width:520px;margin:0 auto}
+.badge{background:rgba(255,255,255,.75);border:1px solid var(--g3);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600}
+.logo{width:48px;height:48px;filter:drop-shadow(0 4px 8px rgba(43,47,54,.25))}
+.ttl{max-width:520px;margin:18px auto 0}
+h1{margin:0;font-size:22px;font-weight:800}
+.ttl p{margin:4px 0 0;font-size:13px;color:#5B616B}
+main{max-width:520px;margin:-40px auto 40px;padding:0 14px}
+.card{background:var(--white);border-radius:24px;padding:20px;box-shadow:0 12px 32px rgba(43,47,54,.12)}
+#ok{display:none;background:var(--g1);border:1px solid var(--g2);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.9;margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:700;margin:16px 0 6px}
+.row label{margin-top:0}
+.req{color:var(--red)}
+.hint{font-size:12px;color:var(--g4);margin:2px 0 6px}
+select,input[type=text],textarea{width:100%;font:inherit;font-size:15px;padding:12px 12px;border:1.5px solid var(--g2);border-radius:14px;background:var(--g1);color:var(--ink);outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--ink);background:#fff}
+select:disabled{opacity:.55}
+#order{direction:ltr;text-align:center;font-weight:800;letter-spacing:1px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg button{font:inherit;font-size:15px;font-weight:700;padding:14px 8px;border:1.5px solid var(--g2);border-radius:14px;background:var(--g1);color:#5B616B;cursor:pointer;transition:.15s}
+.seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pbox{background:var(--g1);border:1px dashed var(--g3);border-radius:16px;padding:12px}
+.pbtn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pbtn button{font:inherit;font-size:14px;font-weight:700;padding:12px 6px;border-radius:12px;border:0;cursor:pointer}
+.cam{background:var(--ink);color:#fff}.gal{background:#fff;color:var(--ink);border:1.5px solid var(--g3)!important}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.th{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden}
+.th img{width:100%;height:100%;object-fit:cover}
+.th span{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;text-align:center;line-height:22px;font-size:14px}
+textarea{resize:vertical}
+#err{display:none;margin-top:14px;padding:12px 14px;border-radius:12px;background:#FBEAE8;color:#9B2C1F;font-size:14px;line-height:1.8}
+#go{width:100%;margin-top:20px;padding:16px;border:0;border-radius:16px;background:var(--ink);color:#fff;font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+#go:disabled{opacity:.5}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="badge">پورتال سفیران مهیار لجستیک</div>
+    <svg class="logo" viewBox="0 0 120 120" role="img" aria-label="مهیار لجستیک">
+      <rect x="8" y="8" width="104" height="104" rx="28" fill="#2B2F36"/>
+      <polygon points="60,28 86,43 60,58 34,43" fill="#C9CED6"/>
+      <polygon points="60,28 86,43 86,73 60,88 34,73 34,43" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+      <polyline points="34,43 60,58 86,43" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <line x1="60" y1="58" x2="60" y2="88" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="ttl"><h1>ثبت وضعیت تحویل سفارش</h1><p>اطلاعات سفارش را کامل کنید</p></div>
+</header>
+<main><div class="card">
+  <div id="ok"></div>
+  <div class="row">
+    <div><label for="amb">سفیر <span class="req">*</span></label><select id="amb"><option value="">در حال بارگذاری...</option></select></div>
+    <div><label for="order">شماره سفارش <span class="req">*</span></label><input id="order" type="text" inputmode="numeric" autocomplete="off" placeholder="مثلاً 123456"></div>
+  </div>
+
+  <label>وضعیت سفارش <span class="req">*</span></label>
+  <div class="seg"><button type="button" id="bOk">تحویل شد</button><button type="button" id="bBad">عدم تحویل</button></div>
+
+  <label for="reason">توضیحات <span class="req">*</span></label>
+  <div class="hint" id="rHint">ابتدا وضعیت سفارش را انتخاب کنید.</div>
+  <select id="reason" disabled><option value="">انتخاب کنید</option></select>
+
+  <label>بارگذاری عکس <span class="req" id="pReq" style="display:none">*</span></label>
+  <div class="hint" id="pHint">ابتدا وضعیت سفارش را انتخاب کنید.</div>
+  <div class="pbox">
+    <div class="pbtn"><button type="button" class="cam" id="bCam">📷 گرفتن عکس</button><button type="button" class="gal" id="bGal">🖼️ انتخاب از گالری</button></div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <label for="desc">توضیح تکمیلی</label>
+  <textarea id="desc" rows="3" placeholder="در صورت نیاز، جزئیات بیشتری بنویسید..."></textarea>
+
+  <div id="err"></div>
+  <button id="go" type="button">ثبت گزارش</button>
+</div></main>
+<input type="file" id="fCam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fGal" accept="image/*" multiple hidden>
+
+<script>
+// لینک /exec اسکریپت خودت را اینجا بگذار:
+var API = 'https://script.google.com/macros/s/AKfycbzJjBmUWi6oeGqjNpPob18OLJYBt868cHBnm_CqxRulthmdGAYI70Py57g7RBavlV1V/exec';
+
+var REASONS = {
+  'تحویل شد': ['تحویل به خود مشتری', 'تحویل به شخص دیگر', 'تحویل در صندوق پستی', 'تحویل به نگهبانی'],
+  'عدم تحویل': ['عدم حضور مشتری', 'آدرس اشتباه یا ناقص', 'عدم پاسخگویی تلفن', 'انصراف مشتری', 'سایر']
+};
+var status = '', photos = [], loc = null, skipLoc = false;
+var $ = function (id) { return document.getElementById(id); };
+
+fetch(API + '?action=list').then(function (r) { return r.json(); }).then(function (d) {
+  $('amb').innerHTML = '<option value="">انتخاب کنید</option>' + d.ambassadors.map(function (n) { return '<option>' + n + '</option>'; }).join('');
+  try { var s = localStorage.getItem('amb'); if (s) $('amb').value = s; } catch (e) {}
+}).catch(function () { $('amb').innerHTML = '<option value="">خطا در بارگذاری لیست</option>'; });
+$('amb').onchange = function () { try { localStorage.setItem('amb', this.value); } catch (e) {} };
+
+$('order').oninput = function () {
+  this.value = this.value.replace(/[۰-۹]/g, function (d) { return d.charCodeAt(0) - 1776; })
+    .replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; }).replace(/\D/g, '');
+};
+
+function pick(s) {
+  status = s;
+  $('bOk').classList.toggle('on', s === 'تحویل شد');
+  $('bBad').classList.toggle('on', s === 'عدم تحویل');
+  var r = $('reason');
+  r.disabled = !s;
+  r.innerHTML = '<option value="">انتخاب کنید</option>' + (REASONS[s] || []).map(function (x) { return '<option>' + x + '</option>'; }).join('');
+  $('rHint').style.display = s ? 'none' : 'block';
+  $('pReq').style.display = s === 'عدم تحویل' ? 'inline' : 'none';
+  $('pHint').textContent = !s ? 'ابتدا وضعیت سفارش را انتخاب کنید.'
+    : s === 'عدم تحویل' ? 'برای عدم تحویل حداقل ۱ و حداکثر ۴ عکس الزامی است.' : 'اختیاری — حداکثر ۴ عکس.';
+  if (s) warm();
+}
+$('bOk').onclick = function () { pick('تحویل شد'); };
+$('bBad').onclick = function () { pick('عدم تحویل'); };
+
+function draw() {
+  $('thumbs').innerHTML = photos.map(function (p, i) {
+    return p ? '<div class="th"><img src="' + p + '"><span data-x="' + i + '">×</span></div>' : '';
+  }).join('');
+}
+$('thumbs').onclick = function (e) { if (e.target.dataset.x !== undefined) { photos.splice(+e.target.dataset.x, 1); draw(); } };
+$('bCam').onclick = function () { $('fCam').value = ''; $('fCam').click(); };
+$('bGal').onclick = function () { $('fGal').value = ''; $('fGal').click(); };
+function addFiles(files) {
+  Array.prototype.forEach.call(files, function (f) {
+    if (photos.length >= 4) return;
+    photos.push(null); var idx = photos.length - 1;
+    var img = new Image(), url = URL.createObjectURL(f);
+    img.onload = function () {
+      var r = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = img.width * r; c.height = img.height * r;
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      photos[idx] = c.toDataURL('image/jpeg', 0.72); URL.revokeObjectURL(url);
+      draw();
+    };
+    img.src = url;
+  });
+}
+$('fCam').onchange = function () { addFiles(this.files); };
+$('fGal').onchange = function () { addFiles(this.files); };
+
+function warm() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function (p) { loc = p.coords; }, function () {}, { enableHighAccuracy: true, timeout: 15000 });
+}
+function getLoc() {
+  return new Promise(function (res) {
+    if (loc) return res(loc);
+    if (!navigator.geolocation) return res(null);
+    navigator.geolocation.getCurrentPosition(function (p) { loc = p.coords; res(loc); }, function () { res(null); },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+  });
+}
+function err(m) { var e = $('err'); e.textContent = m; e.style.display = 'block'; e.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+$('go').onclick = function () {
+  $('err').style.display = 'none';
+  var order = $('order').value;
+  if (!$('amb').value) return err('نام سفیر را انتخاب کنید.');
+  if (order.length < 4) return err('شماره سفارش را وارد کنید.');
+  if (!status) return err('وضعیت سفارش را انتخاب کنید.');
+  if (!$('reason').value) return err('توضیحات را انتخاب کنید.');
+  var ph = photos.filter(Boolean);
+  if (status === 'عدم تحویل' && !ph.length) return err('بارگذاری حداقل یک عکس الزامی است.');
+  var b = $('go'); b.disabled = true; b.textContent = 'در حال ثبت...';
+  var done = function () { b.disabled = false; b.textContent = 'ثبت گزارش'; };
+  getLoc().then(function (c) {
+    if (!c && !skipLoc) {
+      skipLoc = true; done();
+      return err('موقعیت مکانی دریافت نشد. GPS گوشی را روشن کنید و دسترسی مرورگر به موقعیت را مجاز کنید، سپس دوباره «ثبت گزارش» را بزنید. اگر باز هم نشد، با زدن دوباره‌ی دکمه بدون لوکیشن ثبت می‌شود.');
+    }
+    var body = { ambassador: $('amb').value, order: order, status: status, reason: $('reason').value,
+      desc: $('desc').value.trim(), photos: ph, lat: c ? c.latitude : '', lng: c ? c.longitude : '' };
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); }).then(function (r) {
+        done();
+        if (!r.ok) return err(r.msg || 'ثبت انجام نشد.');
+        $('ok').innerHTML = '✅ سفارش شماره <b>' + r.order + '</b> با موفقیت ثبت شد.<br>می‌توانید سفارش بعدی را ثبت کنید.';
+        $('ok').style.display = 'block';
+        $('order').value = ''; $('desc').value = ''; photos = []; draw(); pick(''); skipLoc = false; loc = null;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+  }).catch(function () { done(); err('ارتباط با سرور برقرار نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.'); });
+};
+</script>
+</body>
+</html>
